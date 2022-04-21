@@ -28,6 +28,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
+import java.util.regex.Pattern;
 
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableModel;
@@ -251,6 +252,10 @@ public class McpMappingLoader
         if (input == null || input.trim().isEmpty())
             return getClassModel();
 
+        //pa4ok
+        String fixedInput = input.replaceAll(Pattern.quote("."), "/");
+        //
+
         if (progress != null)
         {
             progress.setMax(3);
@@ -261,7 +266,7 @@ public class McpMappingLoader
 
         // Search Class objects
         for (ClassSrgData classData : srgFileData.srgClassName2ClassData.values())
-            if (classData.contains(input))
+            if (classData.contains(fixedInput))
                 results.add(classData);
 
         if (progress != null)
@@ -275,7 +280,7 @@ public class McpMappingLoader
                 for (MethodSrgData methodData : entry.getValue())
                 {
                     CsvData csv = srgMethodData2CsvData.get(methodData);
-                    if (methodData.contains(input) || csv != null && csv.contains(input))
+                    if (methodData.contains(fixedInput) || csv != null && csv.contains(fixedInput))
                     {
                         results.add(entry.getKey());
                         break;
@@ -295,7 +300,7 @@ public class McpMappingLoader
                 for (FieldSrgData fieldData : entry.getValue())
                 {
                     CsvData csv = srgFieldData2CsvData.get(fieldData);
-                    if (fieldData.contains(input) || csv != null && csv.contains(input))
+                    if (fieldData.contains(fixedInput) || csv != null && csv.contains(fixedInput))
                     {
                         results.add(entry.getKey());
                         break;
